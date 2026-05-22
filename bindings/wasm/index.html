@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>UUID v7 Wasm Demo</title>
+</head>
+<body>
+    <h1>UUID v7 Generator (WebAssembly)</h1>
+    <button id="generateBtn">Generate UUID</button>
+    <pre id="output"></pre>
+
+    <script src="uuid7_wasm.js"></script>
+    <script>
+        Module.onRuntimeInitialized = () => {
+            const gen = new UUID7Generator(Module);
+            window.gen = gen; // untuk debugging
+
+            document.getElementById('generateBtn').onclick = () => {
+                const hex = gen.generateHex();
+                document.getElementById('output').textContent += hex + '\n';
+            };
+
+            for (let i = 0; i < 5; i++) {
+                document.getElementById('output').textContent += gen.generateHex() + '\n';
+            }
+        };
+    </script>
+    <script src="uuid7.js"></script>
+</body>
+</html>
