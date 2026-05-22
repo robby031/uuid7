@@ -10,6 +10,7 @@ import "C"
 import (
 	"errors"
 	"fmt"
+	"sync"
 	"unsafe"
 )
 
@@ -23,7 +24,10 @@ func noescape(p unsafe.Pointer) unsafe.Pointer {
 	return unsafe.Pointer(x ^ 0)
 }
 
+// Generator adalah UUID v7 generator yang aman digunakan secara concurrent
+// oleh banyak goroutine sekaligus.
 type Generator struct {
+	mu  sync.Mutex
 	ctx *C.uuid7_ctx
 }
 
@@ -37,11 +41,15 @@ func NewGenerator() (*Generator, error) {
 
 func (g *Generator) Generate() [16]byte {
 	var buf [16]byte
+	g.mu.Lock()
 	C.uuid7_generate(g.ctx, (*C.uint8_t)(noescape(unsafe.Pointer(&buf[0]))))
+	g.mu.Unlock()
 	return buf
 }
 
 func (g *Generator) Close() {
+	g.mu.Lock()
+	defer g.mu.Unlock()
 	if g.ctx != nil {
 		C.uuid7_destroy(g.ctx)
 		g.ctx = nil
