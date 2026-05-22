@@ -13,6 +13,16 @@ import (
 	"unsafe"
 )
 
+// noescape menyembunyikan pointer dari escape analysis compiler.
+// Aman digunakan di sini karena uuid7_generate hanya menulis ke buffer
+// selama durasi pemanggilan fungsi dan tidak menyimpan pointer setelahnya.
+//
+//go:nosplit
+func noescape(p unsafe.Pointer) unsafe.Pointer {
+	x := uintptr(p)
+	return unsafe.Pointer(x ^ 0)
+}
+
 type Generator struct {
 	ctx *C.uuid7_ctx
 }
@@ -27,7 +37,7 @@ func NewGenerator() (*Generator, error) {
 
 func (g *Generator) Generate() [16]byte {
 	var buf [16]byte
-	C.uuid7_generate(g.ctx, (*C.uint8_t)(unsafe.Pointer(&buf[0])))
+	C.uuid7_generate(g.ctx, (*C.uint8_t)(noescape(unsafe.Pointer(&buf[0]))))
 	return buf
 }
 
