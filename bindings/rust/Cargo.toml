@@ -1,0 +1,11 @@
+[package]
+name = "uuid7"
+version = "1.0.1"
+edition = "2024"
+description = "UUID v7 library binding for Rust"
+
+[dependencies]
+hex = "0.4.3"
+
+[build-dependencies]
+cc = "1.0"
