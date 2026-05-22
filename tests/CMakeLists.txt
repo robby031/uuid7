@@ -17,7 +17,12 @@ target_link_libraries(test_rfc9562 PRIVATE uuid7)
 target_include_directories(test_rfc9562 PRIVATE ${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/src)
 add_test(NAME uuid7_rfc9562 COMMAND test_rfc9562)
 
-add_executable(test_stress_mt test_stress_mt.c)
-target_link_libraries(test_stress_mt PRIVATE uuid7 pthread)
-target_include_directories(test_stress_mt PRIVATE ${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/src)
-add_test(NAME uuid7_stress_mt COMMAND test_stress_mt)
+if(NOT WIN32)
+    add_executable(test_stress_mt test_stress_mt.c)
+    target_link_libraries(test_stress_mt PRIVATE uuid7 pthread)
+    target_include_directories(test_stress_mt PRIVATE
+        ${PROJECT_SOURCE_DIR}/include
+        ${PROJECT_SOURCE_DIR}/src
+    )
+    add_test(NAME uuid7_stress_mt COMMAND test_stress_mt)
+endif()

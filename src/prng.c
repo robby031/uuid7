@@ -63,8 +63,13 @@ static uint64_t xoshiro256_next(uuid7_prng *prng) {
     }
 #endif
 
-#if defined(__x86_64__) || defined(_M_X64)
+#if defined(_MSC_VER)
     #include <intrin.h>
+    static uint64_t rdtsc(void) {
+        return __rdtsc();
+    }
+#elif defined(__x86_64__) || defined(__i386__)
+    #include <x86intrin.h>
     static uint64_t rdtsc(void) {
         return __rdtsc();
     }
