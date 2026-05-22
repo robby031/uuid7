@@ -1,8 +1,10 @@
 package uuid7
 
 /*
+#cgo CFLAGS: -I${SRCDIR}/../../include
 #cgo LDFLAGS: -L${SRCDIR}/../../build -luuid7 -Wl,-rpath,${SRCDIR}/../../build
-#include "../../include/uuid7.h"
+
+#include "uuid7.h"
 #include <stdlib.h>
 */
 import "C"
