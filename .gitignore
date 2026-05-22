@@ -20,3 +20,16 @@ Makefile
 .idea/
 *.log
 Testing
+
+# Python binding artifacts
+bindings/python/**/__pycache__/
+bindings/python/**/*.pyc
+bindings/python/**/*.o
+bindings/python/uuid7/_libuuid7.c
+bindings/python/uuid7/_libuuid7*.so
+bindings/python/.venv/
+bindings/python/*.egg-info/
+bindings/python/.pytest_cache/
+
+# Rust binding artifacts
+bindings/rust/target/
