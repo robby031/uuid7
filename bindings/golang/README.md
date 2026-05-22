@@ -9,7 +9,7 @@ package main
 
 import (
     "fmt"
-    "github.com/robby031/uuid7/bindings/go"
+    "github.com/robby031/uuid7/bindings/golang"
 )
 
 func main() {
