@@ -1,18 +1,42 @@
-**Run Test**
+# UUID v7
+
+Library C untuk generate UUID v7 dengan ordering monotonic. Cocok untuk database index karena UUID diurutkan berdasarkan waktu.
+
+## Build
+
 ```bash
-cmake -B build -DBUILD_TESTS=ON
+cmake -B build -DBUILD_TESTS=ON -DBUILD_BENCHMARKS=ON
 cmake --build build
-ctest --test-dir build          
-./build/tests/test_stress
-./build/tests/test_clock_backward
-./build/tests/test_rfc9562
-./build/tests/test_uuid7
 ```
 
-**Run Benchmarks**
+## Test
+
 ```bash
-cmake -B build -DBUILD_BENCHMARKS=ON
-cmake --build build
-./build/benchmarks/bench_compare
-./build/benchmarks/bench_uuid7
+cd build && ctest
 ```
+
+Atau pakai Makefile:
+
+```bash
+make test
+```
+
+## Penggunaan Dasar
+
+```c
+#include "uuid7.h"
+
+// Stack allocation (zero overhead)
+uuid7_ctx ctx;
+uuid7_init(&ctx);
+
+uint8_t uuid[16];
+uuid7_generate(&ctx, uuid);
+```
+
+## Bindings
+
+- [Python](bindings/python)
+- [Go](bindings/golang)
+- [Rust](bindings/rust)
+- [WASM](bindings/wasm)
