@@ -36,8 +36,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.os }}-shared
-          path: build/${{ matrix.artifact }}
-
+          path: |
+            build/${{ matrix.artifact }}
+            build/Release/${{ matrix.artifact }}
   release:
     name: Create Release
     runs-on: ubuntu-latest
