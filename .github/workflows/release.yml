@@ -58,7 +58,7 @@ jobs:
           mkdir dist
           cp artifacts/ubuntu-latest-shared/libuuid7.so dist/libuuid7-linux-x86_64.so
           cp artifacts/macos-latest-shared/libuuid7.dylib dist/libuuid7-macos-x86_64.dylib
-          cp artifacts/windows-latest-shared/uuid7.dll dist/uuid7-windows-x64.dll
+          cp artifacts/windows-latest-shared/Release/uuid7.dll dist/uuid7-windows-x64.dll
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
