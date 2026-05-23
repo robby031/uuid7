@@ -23,7 +23,6 @@ static uint64_t xoshiro256_next(uuid7_prng *prng) {
 }
 
 #if defined(_WIN32)
-    #define WIN32_LEAN_AND_MEAN
     #include <windows.h>
     #include <bcrypt.h>
     #pragma comment(lib, "bcrypt.lib")
