@@ -9,7 +9,6 @@ package uuid7
 import "C"
 import (
 	"errors"
-	"fmt"
 	"sync"
 	"unsafe"
 )
@@ -52,12 +51,18 @@ func (g *Generator) Close() {
 
 // UUIDToString memformat UUID ke representasi string standar RFC 4122:
 // xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+// Implementasi manual tanpa fmt.Sprintf untuk meminimalkan alokasi.
 func UUIDToString(uuid [16]byte) string {
-	return fmt.Sprintf("%x-%x-%x-%x-%x",
-		uuid[0:4],
-		uuid[4:6],
-		uuid[6:8],
-		uuid[8:10],
-		uuid[10:16],
-	)
+	const hx = "0123456789abcdef"
+	var buf [36]byte
+	for i, j := 0, 0; i < 16; i++ {
+		if i == 4 || i == 6 || i == 8 || i == 10 {
+			buf[j] = '-'
+			j++
+		}
+		buf[j] = hx[uuid[i]>>4]
+		buf[j+1] = hx[uuid[i]&0xf]
+		j += 2
+	}
+	return string(buf[:])
 }
