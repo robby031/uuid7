@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.0.5
+- **Fix critical**: counter_low overflow 56-bit tidak terdeteksi — `++counter_low == 0` tidak pernah terpenuhi karena nilai dimulai dari hasil mask 56-bit, menyebabkan monotonisitas rusak setelah overflow. Fix: mask setelah increment `(counter_low + 1) & 0x00FFFFFFFFFFFFFF`
+- **Fix**: `uuid7_generate_ex` tidak ada null guard untuk `ctx` dan `out` — bisa crash jika dipanggil langsung
+- **Fix**: Rust `unsafe impl Sync` dihapus — type dengan C mutable state tidak aman di-share via `&T` antar thread
+- **Fix**: `UUIDToString` di Go sekarang menghasilkan format standar RFC 4122 dengan dash (`xxxxxxxx-xxxx-7xxx-xxxx-xxxxxxxxxxxx`)
+- **Fix**: Windows build — `prng.c` include `windows.h` sebelum `bcrypt.h` dan hapus `WIN32_LEAN_AND_MEAN`
+- Test Go diperluas: concurrent safety, volume monotonicity, counter overflow, format string, close idempotent
+- Sinkronisasi versi `CMakeLists.txt` ke 1.0.5
+
 ## v1.0.1
 - Fix distribution: bundle C source files into Go, Python, and Rust bindings so they compile standalone without the full repository
 

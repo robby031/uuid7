@@ -57,6 +57,8 @@ void uuid7_init(uuid7_ctx *ctx) {
 }
 
 void uuid7_generate_ex(uuid7_ctx *ctx, uint8_t out[16], uint64_t now) {
+  if (!ctx || !out)
+    return;
   int64_t delta = (int64_t)(now - ctx->last_timestamp_ms);
 
   if (LIKELY(delta > 0)) {
@@ -71,7 +73,8 @@ void uuid7_generate_ex(uuid7_ctx *ctx, uint8_t out[16], uint64_t now) {
              (delta < 0 &&
               (uint64_t)(-delta) <= UUID7_CLOCK_BACKWARD_THRESHOLD_MS)) {
     // Milidetik sama / mundur kecil
-    if (UNLIKELY(++ctx->counter_low == 0)) {
+    ctx->counter_low = (ctx->counter_low + 1) & 0x00FFFFFFFFFFFFFFULL;
+    if (UNLIKELY(ctx->counter_low == 0)) {
       if (UNLIKELY(++ctx->counter_high == 0x4000)) {
         // Overflow counter
         uint64_t fresh_now;

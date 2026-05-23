@@ -42,8 +42,10 @@ impl Drop for Generator {
     }
 }
 
+// Generator bisa dipindah antar thread (Send), tapi tidak bisa di-share
+// secara bersamaan (&Generator antar thread) karena C state tidak thread-safe.
+// Untuk concurrent use, bungkus dengan Arc<Mutex<Generator>>.
 unsafe impl Send for Generator {}
-unsafe impl Sync for Generator {}
 
 #[cfg(test)]
 mod tests {
