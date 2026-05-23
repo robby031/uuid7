@@ -10,32 +10,33 @@ extern "C" {
 #define UUID7_API_VERSION 1
 
 typedef struct {
-    uint64_t s[4];
+  uint64_t s[4];
 } uuid7_prng;
 
 /*
  * ABI STABILITY POLICY
  * --------------------
- * sizeof(uuid7_ctx) tetap konstan selama _reserved masih tersisa.
- * Field tanpa prefiks _ adalah public contract dan tidak akan diubah
- * posisi/ukurannya pada UUID7_API_VERSION yang sama.
- * Field _reserved hanya untuk internal ekspansi masa depan;
- * jangan akses langsung dari kode pengguna.
+ * sizeof(uuid7_ctx) remains constant as long as _reserved remains.
+ * Fields without the _ prefix are public contracts and will not change.
+ * their position/size in the same UUID7_API_VERSION.
+ * The _reserved field is for internal future expansion only;
+ * do not access it directly from user code.
  *
- * Jika padding habis dan perlu restructure struct, UUID7_API_VERSION
- * akan naik dan ini akan menjadi breaking change yang diumumkan
- * secara eksplisit.
+ * If padding runs out and a struct restructure is required, UUID7_API_VERSION
+ * will increase, and this will be a breaking change that is explicitly
+ * announced. explicitly.
  */
+
 typedef struct {
-    uint64_t   last_timestamp_ms;   // timestamp Unix milidetik
-    uint8_t    rand_a_high;         // 4 bit nibble tetap per ms
-    uint16_t   counter_high;        // 14 bit counter bagian atas
-    uint64_t   counter_low;         // 56 bit counter bagian bawah
-    uuid7_prng prng;                // state PRNG
-    uint64_t   _reserved[4];        // 32 byte untuk ekspansi ABI
+  uint64_t last_timestamp_ms; // timestamp Unix milidetik
+  uint8_t rand_a_high;        // 4 bit nibble tetap per ms
+  uint16_t counter_high;      // 14 bit counter bagian atas
+  uint64_t counter_low;       // 56 bit counter bagian bawah
+  uuid7_prng prng;            // state PRNG
+  uint64_t _reserved[4];      // 32 byte untuk ekspansi ABI
 } uuid7_ctx;
 
-uuid7_ctx* uuid7_create(void);
+uuid7_ctx *uuid7_create(void);
 
 void uuid7_destroy(uuid7_ctx *ctx);
 

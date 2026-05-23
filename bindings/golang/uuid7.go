@@ -14,18 +14,12 @@ import (
 	"unsafe"
 )
 
-// noescape menyembunyikan pointer dari escape analysis compiler.
-// Aman digunakan di sini karena uuid7_generate hanya menulis ke buffer
-// selama durasi pemanggilan fungsi dan tidak menyimpan pointer setelahnya.
-//
 //go:nosplit
 func noescape(p unsafe.Pointer) unsafe.Pointer {
 	x := uintptr(p)
 	return unsafe.Pointer(x ^ 0)
 }
 
-// Generator adalah UUID v7 generator yang aman digunakan secara concurrent
-// oleh banyak goroutine sekaligus.
 type Generator struct {
 	mu  sync.Mutex
 	ctx *C.uuid7_ctx
