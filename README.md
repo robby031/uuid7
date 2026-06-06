@@ -1,6 +1,6 @@
 # UUID v7
 
-Library C untuk generate UUID v7 dengan ordering monotonic. Cocok untuk database index karena UUID diurutkan berdasarkan waktu.
+A C library for generating UUID v7 with monotonic ordering. Suitable for index databases because UUIDs are sorted by time.
 
 ## Build
 
@@ -15,13 +15,13 @@ cmake --build build
 cd build && ctest
 ```
 
-Atau pakai Makefile:
+Or use a Makefile:
 
 ```bash
 make test
 ```
 
-## Penggunaan Dasar
+## Basic Usage
 
 ```c
 #include "uuid7.h"
