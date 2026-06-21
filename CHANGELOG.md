@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.1.0
+- **New**: Package-level / module-level convenience functions across all bindings — no generator setup required
+  - Go: `Generate() [16]byte`, `GenerateString() string`
+  - Python: `generate() -> bytes`, `generate_str() -> str`
+  - Rust: `generate() -> [u8; 16]`, `generate_string() -> String`, `to_string(uuid: &[u8; 16]) -> String`
+  - WASM/JS: `init(module)`, `generate()`, `generateHex()`, `generateString()`; `generateString()` added to `UUID7Generator` class
+- **New**: All binding READMEs rewritten in English with full API reference tables and thread-safety notes
+
 ## v1.0.5
 - **Fix critical**: counter_low overflow 56-bit tidak terdeteksi — `++counter_low == 0` tidak pernah terpenuhi karena nilai dimulai dari hasil mask 56-bit, menyebabkan monotonisitas rusak setelah overflow. Fix: mask setelah increment `(counter_low + 1) & 0x00FFFFFFFFFFFFFF`
 - **Fix**: `uuid7_generate_ex` tidak ada null guard untuk `ctx` dan `out` — bisa crash jika dipanggil langsung

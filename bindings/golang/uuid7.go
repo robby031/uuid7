@@ -49,6 +49,32 @@ func (g *Generator) Close() {
 	}
 }
 
+// defaultGen adalah singleton generator yang di-inisialisasi sekali saat pertama
+// kali Generate() atau GenerateString() dipanggil.
+var (
+	defaultOnce sync.Once
+	defaultGen  *Generator
+)
+
+// Generate membuat UUID v7 menggunakan generator bawaan yang di-inisialisasi otomatis.
+// Aman digunakan dari banyak goroutine secara bersamaan.
+func Generate() [16]byte {
+	defaultOnce.Do(func() {
+		var err error
+		defaultGen, err = NewGenerator()
+		if err != nil {
+			panic("uuid7: " + err.Error())
+		}
+	})
+	return defaultGen.Generate()
+}
+
+// GenerateString membuat UUID v7 dan langsung mengembalikan string berformat
+// xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.
+func GenerateString() string {
+	return UUIDToString(Generate())
+}
+
 // UUIDToString memformat UUID ke representasi string standar RFC 4122:
 // xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 // Implementasi manual tanpa fmt.Sprintf untuk meminimalkan alokasi.

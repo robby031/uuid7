@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="uuid7",
-    version="1.0.5",
+    version="1.1.0",
     description="UUID v7 library with monotonic ordering - Python binding",
     packages=find_packages(),
     setup_requires=["cffi>=1.0.0"],

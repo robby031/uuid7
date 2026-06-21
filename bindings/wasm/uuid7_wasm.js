@@ -18,6 +18,11 @@ class UUID7Generator {
         return Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
+    generateString() {
+        const h = this.generateHex();
+        return `${h.slice(0,8)}-${h.slice(8,12)}-${h.slice(12,16)}-${h.slice(16,20)}-${h.slice(20,32)}`;
+    }
+
     destroy() {
         if (this._bufPtr) {
             this._mod._free(this._bufPtr);
@@ -30,6 +35,44 @@ class UUID7Generator {
     }
 }
 
+// --- Convenience API: panggil init(module) sekali, lalu generate() langsung ---
+
+let _defaultGen = null;
+
+/**
+ * Inisialisasi generator bawaan dengan WASM module.
+ * Harus dipanggil sekali di dalam Module.onRuntimeInitialized.
+ *
+ * @param {object} module - WASM Module yang sudah siap
+ */
+function init(module) {
+    if (!_defaultGen) {
+        _defaultGen = new UUID7Generator(module);
+    }
+}
+
+function _requireInit() {
+    if (!_defaultGen) throw new Error("uuid7: panggil init(module) terlebih dahulu");
+}
+
+/** @returns {Uint8Array} 16 bytes UUID v7 */
+function generate() {
+    _requireInit();
+    return _defaultGen.generate();
+}
+
+/** @returns {string} UUID v7 dalam format hex tanpa tanda hubung */
+function generateHex() {
+    _requireInit();
+    return _defaultGen.generateHex();
+}
+
+/** @returns {string} UUID v7 dalam format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx */
+function generateString() {
+    _requireInit();
+    return _defaultGen.generateString();
+}
+
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { UUID7Generator };
+    module.exports = { UUID7Generator, init, generate, generateHex, generateString };
 }
